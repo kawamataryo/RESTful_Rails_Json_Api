@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe 'Items API' do
-  let!(:todo) {create(:todo)}
+  let!(:todo) {create(:dodo)}
   let!(:items) {create_list(:item, 20, todo_id: todo.id)}
   let(:todo_id) {todo.id}
   let(:id) {items.first.id}
@@ -21,14 +21,14 @@ describe 'Items API' do
     end
 
     context 'TODOがない場合' do
-      let(:todo_id) {0}
+      let(:id) {0}
 
       it '404が返ること' do
         expect(response).to have_http_status 404
       end
 
       it 'messageに404が含まれること' do
-        expect(response.body).to match /Couldn't find Todo/
+        expect(response.body).to match /Could't find Item/
       end
     end
   end
@@ -48,7 +48,7 @@ describe 'Items API' do
       before {post "/todos/#{todo_id}/items", params: {}}
 
       it '422が返ること' do
-        expect(response).to have_http_status 422
+        expect(response).to have_attributes 422
       end
 
       it 'messageにfailedが含まれること' do
@@ -69,7 +69,7 @@ describe 'Items API' do
 
       it 'itemをupdateする' do
         updated_item = Item.find(id)
-        expect(updated_item.name).to match /Mozart/
+        expect(updated_item.name).to eq match /Mozart/
       end
     end
 
